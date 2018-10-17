@@ -1,0 +1,467 @@
+            @font-face {
+              font-family: 'Montserrat';
+              font-style: normal;
+              font-weight: 400;
+              src: url("../fonts/montserrat-regular-webfont.eot");
+              src: url("../fonts/montserrat-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/montserrat-regular-webfont.woff2") format("woff2"), url("../fonts/montserrat-regular-webfont.woff") format("woff"), url("../fonts/montserrat-regular-webfont.ttf") format("truetype");
+              unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+            }
+            /* latin */
+            @font-face {
+              font-family: 'Montserrat';
+              font-style: normal;
+              font-weight: 700;
+              src: url("../fonts/montserrat-bold-webfont.eot");
+              src: url("../fonts/montserrat-bold-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/montserrat-bold-webfont.woff2") format("woff2"), url("../fonts/montserrat-bold-webfont.woff") format("woff"), url("../fonts/montserrat-bold-webfont.ttf") format("truetype");
+              unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+            }
+            html, body{
+                height: 100%;
+            }
+            
+            body{
+                padding: 20px;
+                padding-left: 300px; 
+                font-family: 'Montserrat', sans-serif;
+            }
+              #header {
+                z-index:99;
+                margin: 20px;
+              }
+              
+              h1 {
+                font-size:30px;
+                font-weight:300;
+
+              }
+
+              h1 span {
+                font-size: 30px;
+                font-weight:300;
+              }
+              
+             
+            
+              
+              #infoArea {
+                height: 100%;
+                width: 300px;
+                background: url(../img/linhas.png) no-repeat #333333;
+                position:fixed;
+                left:0;
+                top:20px;
+                overflow: auto;
+              }
+              
+              #heatmapAndChartsArea {
+                height: 100%;
+              }
+              
+              .heatmapContainer{
+                  height: 60%;
+                  position: relative;
+              }
+              
+              #heatmapArea{
+                height: 100%;
+                width: 100%;
+                background:#333333; 
+              }
+              
+              #chartsArea {
+                padding: 20px;
+                background:#262626;
+              }
+              
+              #chartsArea > .row + .row{
+                margin-top: 10px;
+              }
+             
+             
+              .info-area-inner{
+                padding: 20px;
+                max-width: 90%;
+                margin: auto;
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 110px;
+                top: 0;
+                overflow: auto;
+              }
+              
+              .info-area-inner > .form-group{
+                  margin-bottom:40px;
+              }
+              .p-md{
+                  font-size: 20px;
+                  font-weight: bold;
+              }
+              
+              .vendor-logo {
+                position: absolute;
+                bottom: 0;
+                height: 110px;
+                left: 0;
+                right: 0;
+
+             }
+              
+              path.domain { stroke: white; font-family: 'Montserrat', sans-serif;font-weight:lighter;}
+              .tick text { fill: white;}
+              .c3-legend-item text { fill: white;}
+              .c3-tooltip td {
+                font-size:13px;
+                font-family: 'Montserrat', sans-serif;
+                padding: 3px 6px;
+                background-color:#fff;
+                border-left:1px dotted #999;
+                color: #000;
+                font-weight:normal;
+              }
+
+              #progress-bar-background {
+                position:absolute;
+                width:100%;
+                height:3px;
+                left:0;
+                bottom:0;
+                background:white;
+                z-index:98;
+              }
+
+              #progress-bar-container {
+                position:absolute;
+                overflow:visible;
+                width:5%;
+                left:0;
+                bottom:0;
+                z-index:99;
+              }
+
+              #progress-bar-pointer {
+                float:right;
+                position: relative;
+                background:#262626;
+                margin-right: -45px;
+                margin-bottom:20px;
+                padding-top:0px;
+                text-align:center;
+                height:85px;
+                width:90px;
+
+                cursor: pointer;
+              }
+
+              #progress-bar-pointer:after {
+                position: absolute;
+                content: ' ';
+                top: 100%;
+                left: 50%;
+                border: solid transparent;
+                border-top-color: #262626;
+                border-width: 15px;
+                margin-left: -15px;
+              }
+
+              #progress-bar-pointer span {
+                font-size:10px;
+                line-height:150%;
+              }
+
+              #progress-bar {
+                position:absolute;
+                background:#327CCB;
+                width:100%;
+                right:0;
+                bottom:0;
+                height:3px;
+              }
+              
+              #progress-bar-instructions {
+                position:absolute;
+                top:-75px;
+                left:140px;
+                height:62px;
+                padding-top:18px;
+                width:80px;
+                text-align: center;
+                background:white;
+                //display:inline-block;
+                display:none;
+              }
+
+              #progress-bar-instructions:after {
+                position:absolute;
+                content:' ';
+                top:50px;
+                left:0px;
+                border:solid transparent;
+                border-right:none;
+                border-bottom-color:#FFF;
+                border-width:15px;
+                margin-left:-15px;
+              }
+              
+              #start_date{
+                  color: black;
+              }
+              #end_date{
+                  color: black;
+              }
+              
+              /* Start by setting display:none to make this hidden.
+                Then we position it in relation to the viewport window
+                with position:fixed. Width, height, top and left speak
+                for themselves. Background we set to 80% white with
+                our animation centered, and no-repeating */
+            .modal {
+                display:    none;
+                position:   fixed;
+                z-index:    1000;
+                top:        0;
+                left:       0;
+                height:     100%;
+                width:      100%;
+                background: url(../img/loader_blue.gif) rgba(255,255,255,.8) 50% 50% no-repeat;
+                
+            }
+
+            /* When the body has the loading class, we turn
+               the scrollbar off with overflow:hidden */
+            body.loading .modal {
+                overflow: hidden;   
+            }
+
+            /* Anytime the body has the loading class, our
+               modal element will be visible */
+            body.loading .modal {
+                display: block;
+            }
+
+
+
+             /* The Modal (background) */
+            .modalIn {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1000; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #333333;
+                margin: 15% auto; /* 15% from the top and centered */
+               /* padding: 20px;*/
+               /* border: 1px solid #888;*/
+                width: 900px; /* Could be more or less, depending on screen size */
+                height: 500px;
+            }
+
+            /* The Close Button */
+            .closeCountry {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .closeCountry:hover,
+            .closeCountry:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            } 
+            .closeTowns {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .closeTowns:hover,
+            .closeTowns:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            #titleAreaTowns{
+                top:0;
+                height:55px;
+            }
+            #titleAreaCountries{
+                top:0;
+                height:55px;
+            }
+            
+            #inputAreaTowns{
+                top: 55px;
+                height: 460px;
+            }
+            #inputAreaCountries{
+                top: 55px;
+                height: 460px;
+                //background: #262626;
+            }
+
+            #bottonAreaTowns{
+                /*top: 455px;*/
+                height: 55px;
+                background: #333333;
+                //position: fixed;
+            }
+            #bottonAreaCountries{
+                /*top: 455px;*/
+                height: 55px;
+                background: #333333;
+                //position: relative;
+            }
+
+            .inputContainer{
+              max-height: 400px;
+              overflow: auto;
+              padding: 10px 15px;
+              background: #262626;
+            }
+
+            .listCountries > li:nth-child(4n+1){
+                clear: both;
+            }
+
+            .listCountries > li .label{
+                padding: 5px;
+                margin-bottom: 2px;
+                display: block;
+                white-space: normal;
+            }
+            
+            .listTowns > li:nth-child(4n+1){
+                clear: both;
+            }
+
+            .listTowns > li .label{
+                padding: 5px;
+                margin-bottom: 2px;
+                display: block;
+                white-space: normal;
+            }
+            
+            .labelNormalColors{
+                background: #3cdbc0;
+            }
+            .labelOpacColors{
+                opacity: 0.3;
+            }
+            
+            .label-primary {
+                background-color: #327CCF;
+            }
+
+
+            .inputListContainer {
+              height: 68%;
+              top: 6%;
+              position: relative;
+              margin-left: 2%;
+              width: 25%;
+              background: #333333;
+              float: left;
+              display: inline-block;
+            }
+
+            .mapContainer {
+              height: 68%;
+              top: 6%;
+              position: relative;
+              width: 67%;
+              background: #262626;
+              margin-left: 4%;
+              float: left;
+              display: inline-block;
+            }
+            #inputMap{
+               height: 100%;
+               width:100%;
+               background: white;
+            }
+            #inputText{
+              height: 11%;
+              width:100%;
+              background: #333333;
+              margin-bottom: 2%;
+            }
+            #inputRecent{
+              height: 35%;
+              width:100%;
+              background: blue;
+              margin-bottom: 2%;
+            }
+            #inputAll{
+              height: 50%;
+              width:100%;
+              background: green;
+
+            }
+
+            .modalTitle{
+                margin-left: 25px; 
+                margin-top: 5px;
+                display: inline-block;
+            }
+
+            .elemDisplayContainer{
+              height: 10%;
+              top: 75%;
+              position: relative;
+              width: 96%;
+              background: red;
+              margin-top: 1%;
+              margin-left: 2%;
+              margin-right: 2%;
+            }
+
+            .modalButtons{
+                width: 50%;
+                left:50%;
+                height: 100%;
+                left: 65%; 
+                margin-top:4px; 
+                position: relative;
+                display: inline-block;
+            }
+            
+            .modalChecks{
+                position: relative;
+                left :550px; 
+                margin-top: 5px;
+                display: inline-block;
+            }
+
+            .dateTimePickerLabel{
+                position: relative;
+                width: 30%;
+                float: left;
+                display: inline-block;
+            }
+            .dateTimePickerDate{
+                position: relative;
+                width: 60%;
+                float: left;
+                display: inline-block;
+            }
+
+            .cursorDefault{  
+                cursor: default;  
+            }
+            
+            .myFontStyle{
+                font-family: 'Montserrat', sans-serif;stroke: white;
+                font-size: 15px;
+            }

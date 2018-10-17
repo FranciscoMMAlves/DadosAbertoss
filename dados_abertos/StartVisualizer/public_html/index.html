@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <script type='text/javascript' src='https://maps.google.com/maps/api/js?key=AIzaSyCdFzQDrAZV_oA7YO8hYTaN-bpuGtNdNII&callback=initMap'></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdFzQDrAZV_oA7YO8hYTaN-bpuGtNdNII&libraries=visualization"></script>
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:700,300' rel='stylesheet' type='text/css'>
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.0/c3.min.css' rel="stylesheet">
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.css" rel="stylesheet"> 
+        <link href="css/main.css" rel="stylesheet">
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        
+        <div id = 'infoArea'>
+            <div class="info-area-inner">
+                <div class ="form-group">
+                   <!-- <img src="title.png" class="img-responsive center-block" width="150" height="50" alt="logoApp">-->
+                </div>
+                <div class ="form-group text-center" >
+                    <button type="button" id='animation-control-button' class="btn btn-primary ">
+                        <i id='button-text' class="glyphicon glyphicon-play"></i> 
+                        <span class="myFontStyle">Iniciar animação</span>
+                    </button>
+                </div>
+               <div class = "form-group" > 
+                    <label>Transportes Águeda</label>
+                    <!--<div ><p id = 'total-users' class="p-md"> </p></div>-->
+                </div>
+                <div class = "form-group" > 
+                    <label>Total Veículos</label>
+                    <div ><p id = 'total-users' class="p-md"> </p></div>
+                </div>
+                <div class = "form-group" > 
+                    <label>Total Carros</label>
+                    <div ><p id = 'total-cars' class="p-md"> </p></div>
+                </div>
+                <div class = "form-group" > 
+                    <label>Total Motociclos</label>
+                    <div ><p id = 'total-two-wheelers' class="p-md"> </p></div>
+                </div>
+                <div class = "form-group" > 
+                    <label>Total Carrinhas</label>
+                    <div ><p id = 'total-vans' class="p-md"> </p></div>
+                </div>
+                <div class = "form-group" > 
+                    <label>Total Semi-Trailers</label>
+                    <div ><p id = 'total-semi-trucks' class="p-md"> </p></div>
+                </div>
+                <div class = "form-group" > 
+                    <label>Total Cameões</label>
+                    <div ><p id = 'total-trucks' class="p-md"> </p></div>
+                </div>
+            </div>
+            <div class="vendor-logo">
+                     <img class = "center-block img-responsive-" src="img/camara_agueda_logoo.jpg" width="300" height="90" alt="dados-abertos">
+                </div> 
+        </div>
+        <div id ='heatmapAndChartsArea'>
+            <div class="heatmapContainer" >
+                 <div id='heatmapArea'>
+            </div>
+            <div id='progress-bar-background'> </div>
+                <div id='progress-bar-container'>
+                  <div id='progress-bar-pointer-container'>
+                    <div id='progress-bar-pointer' onclick='void(0)'></div>
+                    <div id='progress-bar-instructions'>drag me<br>to jump dates</div>
+                  </div>
+                  <div id='progress-bar'> </div>
+                </div>
+                
+            </div>
+            <div id ='chartsArea'>
+                <div class="row" >
+                    <div class="col-sm-3">
+                         <!--<input type="checkbox" id="caravanistsChecked" value="option1"> Caravanistas  -->
+                         <button type="button" id='showParks' class="btn btn-primary">
+                            <i id='button-showParks' class="glyphicon glyphicon-align-right"></i>
+                            <span class="myFontStyle">Locais de Contagem</span>
+                        </button>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="dateTimePickerLabel">
+                            <span>Data Inicial:</span>
+                        </div>
+                        <div class="dateTimePickerDate">
+                            <div class="form-group">
+                                <div class='input-group date' id='start_date'>
+                                    <input id="st_date" type='text' class="form-control" value="2017-08-01" />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                    </span> 
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="dateTimePickerLabel">
+                            <span>Data Final:</span>
+                        </div>
+                        <div class="dateTimePickerDate">
+                            <div class="form-group">
+                                <div class='input-group date' id='end_date'>
+                                    <input id="ed_date" type='text' class="form-control" value="2017-08-31"/>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" id='apply-filter' class="btn btn-primary labelOpacColors">
+                            <i id='button-filter' class="glyphicon glyphicon-align-right"></i>
+                            <span class="myFontStyle">Aplicar filtros</span>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class = "col-sm-3">
+                        <div id="divCheckCountries" class="checkbox"> Top Ruas 
+                            <!--<label> <input id="checkCountries" type="checkbox" checked value="">  </label> -->
+                            <a >
+                                <span id="filterCountry" class="glyphicon glyphicon-filter"></span>
+                            </a>
+                        </div>
+                        <div id='chartCountries' ></div>
+                    </div>
+                    <div class = "col-sm-3">
+                        <div id="divCheckTowns" class="checkbox"> Top Velocidades, todas: 
+                              <!--<label> <input id="checkTowns" type="checkbox" checked value="">  </label> -->
+                            <a >
+                                <span id="filterTowns" class="glyphicon glyphicon-filter"></span>
+                            </a>
+                        </div>
+                        <div id='chartTowns' ></div>
+                    </div>
+                    <div class = "col-sm-3">
+                         <!--<h3 class="h5">Período horário</h3>-->
+                          <div id="divCheckPeriods" class="checkbox"> Veículos, todos <label> <input id="checkPeriods" type="checkbox" checked value="">  </label> </div>
+                          <div id='chartPeriod' ></div>
+                    </div>
+                    <div class = "col-sm-3">
+                         <!--<h3 class="h5">Pontos entrada/saída</h3>-->
+                          <div id="divCheckInOuts" class="checkbox"> Direcção, todos <label> <input id="checkInOuts" type="checkbox" checked value="">  </label> </div>
+                          <div id='chartEntriesExits' ></div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal" id="waitDiv"> <!-- Place at bottom of page --></div>
+            <div id="myModalCountries" class="modalIn">
+                <div class="modal-content">
+                    <div id="inputAreaCountries">
+                        <div id = "titleAreaCountries" > 
+                            <label class="modalTitle"> Selecção de países.</label>
+                            
+                            <div id="m_div_check_country" class="checkbox modalChecks">
+                                <label><input id="m_countryCheck" checked type="checkbox"  value=""> Todos</label>
+                            </div>    
+                            
+                        </div>
+                        <div class="inputContainer" id="countriesContainer">
+                            <ul id="listCountries" class="list-unstyled listCountries row">
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="bottonAreaCountries" >
+                        <div class="modalButtons">
+                            <!--Cancel select buttons.-->
+                            <button type="button" id='okCountry' class="btn btn-success">
+                                <i id='button-okCountry' class="glyphicon glyphicon-ok"></i>
+                                <span class="myFontStyle">Salvar Escolha</span>
+                            </button>
+                            <button type="button" id='cancelCountry' class="btn btn-danger">
+                                <i id='button-cancelCountry' class="glyphicon glyphicon-remove-circle"></i>
+                                <span class="myFontStyle">Cancelar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="myModalTowns" class="modalIn">
+                <div class="modal-content">
+                    <div id="inputAreaTowns">
+                        <div class = "form-group" > 
+                            <label class="modalTitle"> Selecção de Localidades.</label>
+                           
+                            <div id="m_div_check_town" class="checkbox modalChecks">
+                                <label><input id="m_townCheck" type="checkbox" checked value=""> Todos</label>
+                            </div>
+                        </div>
+                        <div class="inputContainer" id="countriesTowns">
+                            <ul id="listTowns" class="list-unstyled listTowns row">
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="bottonAreaTowns">
+                        <div class="modalButtons">
+                            <!--Cancel select buttons.-->
+                            <button type="button" id='okTown' class="btn btn-success">
+                                <i id='button-okTown' class="glyphicon glyphicon-ok"></i>
+                                <span class="myFontStyle">Salvar Escolha</span>
+                            </button>
+                            <button type="button" id='cancelTown' class="btn btn-danger">
+                                <i id='button-cancelTown' class="glyphicon glyphicon-remove-circle"></i>
+                                <span class="myFontStyle">Cancelar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script src='js/HandleData.js'></script>
+        <script src='js/h-map.js'></script>
+        <script src='js/h-gmap.js'></script>
+        <script src="js/moment-with-locales.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.0/d3.min.js' charset="utf-8"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.0/c3.min.js'></script>
+        
+        <script type='text/javascript'>
+            
+            
+            // Get the modal
+            var modalCountries = document.getElementById('myModalCountries');
+            // Get the button that opens the modal
+            var btnCountries = document.getElementById("filterCountry");
+            // Get the <span> element that closes the modal
+            var okCountries = document.getElementById("okCountry");
+            var cancelCountries = document.getElementById("cancelCountry");
+            // When the user clicks on the button, open the modal
+            btnCountries.onclick = function() {
+                modalCountries.style.display = "block";
+            };
+            // When the user clicks on <span> (x), close the modal
+            okCountries.onclick = function() {
+                //logic to modal countries ok i.e update the select countries info.
+                modalCountries.style.display = "none";
+                var l_c = document.getElementById('listCountries').getElementsByTagName('span');
+                
+                for (var i=0; i<l_c.length; i++)
+                {
+                    listCountriesSelected[$(l_c[i]).text()]=!$(l_c[i]).hasClass('labelOpacColors');
+                }
+                testFilter();
+            };
+            
+            cancelCountries.onclick = function() {
+                //logic to modal countries cancel i.e restore the modal countries info.
+                modalCountries.style.display = "none";
+                var l_c = document.getElementById('listCountries').getElementsByTagName('span');
+                var allSell=true;
+                for (var i=0; i<l_c.length; i++)
+                {
+                    var isSel = listCountriesSelected[$(l_c[i]).text()];
+                    if(isSel && $(l_c[i]).hasClass('labelOpacColors')){
+                        $(l_c[i]).removeClass('labelOpacColors');
+                    }
+                    else if(!isSel && !$(l_c[i]).hasClass('labelOpacColors')){
+                        allSell=false;
+                        $(l_c[i]).addClass('labelOpacColors');
+                    }
+                }
+                if(!allSell){
+                    $('#m_div_check_country').html("<label><input id=\"m_countryCheck\" type=\"checkbox\"  value=\"\"> Todos</label>");
+                }
+                else{
+                    $('#m_div_check_country').html("<label><input id=\"m_countryCheck\" checked type=\"checkbox\"  value=\"\"> Todos</label>");
+                }
+            };
+            
+            var modalTowns = document.getElementById('myModalTowns');
+            // Get the button that opens the modal
+            var btnTowns = document.getElementById("filterTowns");
+            // Get the <span> element that closes the modal
+            var okTowns = document.getElementById("okTown");
+            var cancelTowns = document.getElementById("cancelTown");
+            // When the user clicks on the button, open the modal
+            btnTowns.onclick = function() {
+                modalTowns.style.display = "block";
+            }
+            // When the user clicks on <span> (x), close the modal
+            okTowns.onclick = function() {
+                //logic to modal countries ok i.e update the select countries info.
+                modalTowns.style.display = "none";
+                var l_t = document.getElementById('listTowns').getElementsByTagName('span');
+                for (var i=0; i<l_t.length; i++)
+                {
+                    listTownsSelected[$(l_t[i]).text()]=!$(l_t[i]).hasClass('labelOpacColors');
+                }
+                testFilter();
+            }
+            cancelTowns.onclick = function() {
+                //logic to modal countries cancel i.e restore the modal countries info.
+                modalTowns.style.display = "none";
+                var l_t = document.getElementById('listTowns').getElementsByTagName('span');
+                var allSell=true;
+                for (var i=0; i<l_t.length; i++)
+                {
+                    var isSel = listTownsSelected[$(l_t[i]).text()];
+                    if(isSel && $(l_t[i]).hasClass('labelOpacColors')){
+                        $(l_t[i]).removeClass('labelOpacColors');
+                    }
+                    else if(!isSel && !$(l_t[i]).hasClass('labelOpacColors')){
+                        allSell=false;
+                        $(l_t[i]).addClass('labelOpacColors');
+                    }
+                }
+                if(!allSell){
+                    $('#m_div_check_town').html("<label><input id=\"m_townCheck\"  type=\"checkbox\"  value=\"\"> Todos</label>");
+                }
+                else{
+                    $('#m_div_check_town').html("<label><input id=\"m_townCheck\" checked type=\"checkbox\"  value=\"\"> Todos</label>");
+                }
+            }
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target === modalTowns || event.target === modalCountries) {
+                    modalTowns.style.display = "none"; 
+                    modalCountries.style.display = "none";
+                    // restore modal informations
+                }
+                
+            }
+            
+            $('#start_date').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    //locale : 'pt'
+            });
+            $('#end_date').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    //locale : 'pt'
+            });
+            
+            $("#start_date").on("dp.change", function(e) {
+                testFilter();
+            });
+            $("#end_date").on("dp.change", function(e) {
+                testFilter();
+            });
+            
+            
+            
+            var oldQuery = "/sd.2017-08-01*ed.2017-08-31*gr.day*ca.false";
+            
+            var DAY_IN_MILLI = 1000 * 60 * 60 * 24;
+            var userAgent = navigator.userAgent.toLowerCase();
+            var isBrowserFast = /webkit/.test(userAgent);
+            var allCountriesSelected = true;
+            var allTownsSelected = true;
+            var allPeriodsSelected = true;
+            var allInsOutsSelected = true;
+            var isCountrySelected ={};
+            var isTownSelected = {};
+            var isPeriodSelected = {};
+            var isEntrySelected = {};
+            var isExitSelected = {};
+            var numCountriesSel = 7;
+            var numTownsSel = 7;
+            var numPeriodsSel = 6;
+            var numInsOutsSel = 7;
+            var countryData = {};
+            var entryExitData = {};
+            var roamersInPeriod = {};
+            var roamersInTowns = {};
+            var totalRoamers = 0;
+            var excludeCountries = [];
+            var excludeTows = [];
+            var listCountriesSelected={};
+            var listTownsSelected={};
+            var v_data = {}
+            var displayParks = false;
+            var DistributionAnimator = function(flowsData, heatmap, map, totalCaravanistsInParks,
+                                        totalCaravanistsOutParks,countriesData,townsData,
+                                        periodData, inOutData, totals_vehicles,total_cars,total_vans,total_two_wheelers,
+                                        total_trucks,total_semi_trucks,vehicles_data) {
+                entryExitData=inOutData;
+                roamersInPeriod=periodData;
+                roamersInTowns=townsData;
+                countryData=countriesData;
+                v_data=vehicles_data;
+                //totalRoamers=countryData.total_count;
+                totalRoamers = totals_vehicles;
+                //console.log("Total pass "+ total_cars);
+                this.totalCaravanistsInParks=totalCaravanistsInParks;
+                this.totalCaravanistsOutParks=totalCaravanistsOutParks;
+                this.map = map;
+                this.max_flow = flowsData.max_count;
+                this.data = flowsData.flows;
+                this.sortedData = [].slice.call(this.data).sort(function(a, b){return a[2] - b[2]});
+                this.heatmap = heatmap;
+                this.dataLength = this.data.length - 1;
+                this.markerInfoWindow = new google.maps.InfoWindow();
+                this.markers=[];
+               
+               
+               
+               // comment for demo
+                var listHtml="";
+                for(var i = 1; i < countryData.countries.length;i++){
+                    isCountrySelected[countryData.countries[i]] = true;
+                }
+                
+                var orderData = countryData.allDataCountries.sort();
+                for(var i = 0; i < orderData.length;i++){
+                    if(!orderData[i].includes("thuraya")){
+                        listHtml += "<li id =\"tougleCountries\"  value=\"true\" class=\"col-sm-3\"><span class=\"label label-primary cursorDefault\">"+orderData[i]+"</span></li>";
+                        listCountriesSelected[orderData[i]]=true;
+                    }
+                }
+        
+                $('#listCountries').html(listHtml);
+                listHtml="";
+                for(var i = 1; i < roamersInTowns.towns.length; i++){
+                    isTownSelected[roamersInTowns.towns[i]] = true;
+                }
+                var orderData = roamersInTowns.allDataTowns.sort();
+                for(var i = 0; i < orderData.length; i++){
+                    listHtml+="<li id =\"tougleTowns\"  value=\"true\" class=\"col-sm-3\"><span class=\"label label-primary cursorDefault\">"+orderData[i]+"</span></li>";
+                    listTownsSelected[orderData[i]]=true;
+                }
+                $('#listTowns').html(listHtml);
+                /*for(var i = 1; i < roamersInPeriod.period.length; i++){
+                    isPeriodSelected[roamersInPeriod.period[i]] = true;
+                }
+                for(var i = 1; i < entryExitData.location.length; i++){
+                    isEntrySelected[entryExitData.location[i]] = true;
+                    isExitSelected[entryExitData.location[i]] = true;
+                }*/
+                
+                var l_c = document.getElementById('listCountries').getElementsByTagName('span');
+                //add listners on countries to tougle when click
+                for (var i=0; i<l_c.length; i++)
+                {
+                    
+                    l_c[i].addEventListener('click', function() {
+                        var iSelector = $(this);
+                        if(iSelector.hasClass('labelOpacColors')) {
+                            iSelector.removeClass('labelOpacColors');
+                            var l_tmp = document.getElementById('listCountries').getElementsByTagName('span');
+                            var allSel = true;
+                            for (var i=0; i<l_tmp.length; i++)
+                            {
+                                if($(l_tmp[i]).hasClass('labelOpacColors'))
+                                    allSel=false;
+                            }
+                            if(allSel)
+                                $('#m_div_check_country').html("<label><input id=\"m_countryCheck\" checked type=\"checkbox\"  value=\"\"> Todos</label>");
+                            else
+                                $('#m_div_check_country').html("<label><input id=\"m_countryCheck\"  type=\"checkbox\"  value=\"\"> Todos</label>");
+                            var $checkCountries = $('#m_countryCheck');
+                            $checkCountries.click(checkCountriesFunction.bind(this));
+                        }
+                        else{
+                            iSelector.addClass('labelOpacColors');
+                            if(document.getElementById('m_countryCheck').checked){
+                                $('#m_div_check_country').html("<label><input id=\"m_countryCheck\" type=\"checkbox\"  value=\"\"> Todos</label>");
+                                var $checkCountries = $('#m_countryCheck');
+                                $checkCountries.click(checkCountriesFunction.bind(this));
+                            }
+                            
+                        }
+                    },false);
+                    
+                }
+                var l_t = document.getElementById('listTowns').getElementsByTagName('span');
+                //add listners on countries to tougle when click
+                for (var i=0; i<l_t.length; i++)
+                {
+                    l_t[i].addEventListener('click', function() {
+                        var iSelector = $(this);
+                        if(iSelector.hasClass('labelOpacColors')) {
+                            iSelector.removeClass('labelOpacColors');
+                            var l_tmp = document.getElementById('listTowns').getElementsByTagName('span');
+                            var allSel = true;
+                            for (var i=0; i<l_tmp.length; i++)
+                            {
+                                if($(l_tmp[i]).hasClass('labelOpacColors'))
+                                    allSel=false;
+                            }
+                            if(allSel)
+                                $('#m_div_check_town').html("<label><input id=\"m_townCheck\" checked type=\"checkbox\"  value=\"\"> Todos</label>");
+                            else
+                                $('#m_div_check_town').html("<label><input id=\"m_townCheck\"  type=\"checkbox\"  value=\"\"> Todos</label>");
+                            var $checkTowns = $('#m_townCheck');
+                            $checkTowns.click(checkTownsFunction.bind(this));
+                        }
+                        else{
+                            iSelector.addClass('labelOpacColors');
+                            if(document.getElementById('m_townCheck').checked){
+                                $('#m_div_check_town').html("<label><input id=\"m_townCheck\"  type=\"checkbox\"  value=\"\"> Todos</label>");
+                                var $checkTowns = $('#m_townCheck');
+                                $checkTowns.click(checkTownsFunction.bind(this));
+                            }
+                        }
+                    },false);
+                }
+                
+                //create marker array to track displayed markers and the info window that displays when they are clicked
+                
+                //figure out the date range
+                this.dateRange = {start: this.data[0][2], end: this.data[this.data.length-1][2]};
+                this.dayRange = Math.ceil((this.dateRange.end - this.dateRange.start) / DAY_IN_MILLI);
+
+                this.isPaused = true;
+
+                //calculate the number of days that elapse for each animation frame
+                this.animationTimeMultiplier = 700000  * (this.dayRange / 365);
+                console.log("AnimeMult: "+ this.animationTimeMultiplier);
+                //calculate how long crimes should be displayed for based on our range
+                this.visibleLifespan = Math.ceil(this.dayRange / 15);
+                console.log("VisLifeSpan1 "+ this.visibleLifespan);
+                if(this.visibleLifespan < 10)
+                  this.visibleLifespan = 10;
+                else if(this.visibleLifespan > 30)
+                  this.visibleLifespan = 30;
+                //this.visibleLifespan = this.visibleLifespan * DAY_IN_MILLI;
+                this.visibleLifespan = 40* DAY_IN_MILLI;
+                console.log("VisLifeSpan2 "+ this.visibleLifespan);
+                this.newData = {"data_flows": this.data, "eeData":this.entryExitData, "periodData":this.roamersInPeriod,
+                                "townData":this.roamersInTowns,"totalRoamers":this.totalRoamers};
+                
+                this.lowIndex = 0; //holds the data index of the oldest crime we are displaying
+                this.highIndex = 0; //holds the data index of the newest crime we are displaying
+                
+                this.setupProgressBar();
+
+                $('#progress-bar-pointer').hide();
+                
+                var self = this;
+                var $animationControlButton = $('#animation-control-button');
+                $animationControlButton.click(this.togglePause.bind(this));
+                this.buttonStart = $('#button-text');
+                
+                var $filterButton = $('#apply-filter');
+                $filterButton.click(this.applyFiltersV2.bind(this));
+                
+                var $checkCountries = $('#m_countryCheck');
+                $checkCountries.click(checkCountriesFunction.bind(this));
+                
+                var $checkTowns = $('#m_townCheck');
+                $checkTowns.click(checkTownsFunction.bind(this));
+                
+                var $checkPeriods = $('#checkPeriods');
+                $checkPeriods.click(checkPeriodsFunction.bind(this));
+                
+                var $checkInOuts = $('#checkInOuts');
+                $checkInOuts.click(checkInOutsFunction.bind(this));
+                
+                var $parksButton = $('#showParks');
+                $parksButton.click(this.tougleParks.bind(this));
+                var $checkInOuts = $('#caravanistsChecked');
+                $checkInOuts.click(checkCaravanistsFunction.bind(this));
+                
+             
+                
+                
+                //hookup spacebar pauser/resume
+                $(window).keypress(this.togglePause.bind(this));
+                this.$animationControl = $animationControlButton;
+                //if the animation is paused then redraw the current frame on drag end
+                google.maps.event.addListener(map, 'dragend', function() {
+
+                        if (self.isPaused){
+                            if(this.isAnimating)
+                                self.drawFrame(self.currentDate);
+                        }
+                    });
+                google.maps.event.addListener(map, 'zoom_changed', function() {
+                    var radiusMultiplier, zoom = map.getZoom();
+                    if(zoom > 10)
+                        radiusMultiplier = 2.6;
+                    else if(zoom < 9)
+                        radiusMultiplier = 1;
+                    else
+                        radiusMultiplier = 1.5;
+
+                    heatmap.heatmap.set('radius', zoom * radiusMultiplier);
+                    if (self.isPaused){
+                        if(this.isAnimating)
+                            self.drawFrame(self.currentDate);
+                    }
+                    
+                });
+                $('#total-users').text(totalRoamers);
+                $('#total-cars').text(total_cars);
+                $('#total-two-wheelers').text(total_two_wheelers);
+                $('#total-vans').text(total_vans);
+                $('#total-semi-trucks').text(total_semi_trucks);
+                $('#total-trucks').text(total_trucks);
+                //$('#caravanists-in-parks').text(caravanists);
+                this.drawCharts_2(true);
+                $('#waitDiv').hide();
+            };
+            
+            
+            
+             function checkCaravanistsFunction(){
+                 testFilter();
+             };
+            function checkCountriesFunction(){
+                var chk = (document.getElementById('m_countryCheck')).checked;
+                if(chk){
+                    var l_c = document.getElementById('listCountries').getElementsByTagName('span');
+                    for (var i=0; i<l_c.length; i++)
+                    {
+                        $(l_c[i]).removeClass('labelOpacColors');
+                    }
+                }
+                else{
+                    var l_c = document.getElementById('listCountries').getElementsByTagName('span');
+                    for (var i=0; i<l_c.length; i++)
+                    {
+                        $(l_c[i]).addClass('labelOpacColors');
+                    }
+                }
+            };
+            function checkTownsFunction(){
+                var chk = (document.getElementById('m_townCheck')).checked;
+                if(chk){
+                    var l_t = document.getElementById('listCountries').getElementsByTagName('span');
+                    for (var i=0; i<l_t.length; i++)
+                    {
+                        $(l_t[i]).removeClass('labelOpacColors');
+                    }
+                }
+                else{
+                     var l_t = document.getElementById('listCountries').getElementsByTagName('span');
+                    for (var i=0; i<l_t.length; i++)
+                    {
+                        $(l_t[i]).addClass('labelOpacColors');
+                    }
+                }
+            };
+            function checkPeriodsFunction(){
+                var chk = (document.getElementById('checkPeriods')).checked;
+                if(chk){
+                    allPeriodsSelected=true;
+                    numPeriodsSel = 6;
+                    for(var k in isPeriodSelected)
+                        isPeriodSelected[k] = true;
+                    for(var i = 0; i < 6; i++){
+                        var k = "#chartPeriod .c3-shape-"+ i;
+                        d3.selectAll(k).style("opacity",1);
+                    }
+                }
+                else{
+                    allPeriodsSelected= false;
+                    numPeriodsSel = 0;
+                    for(var k in isPeriodSelected)
+                        isPeriodSelected[k] = false;
+                    for(var i = 0; i < 6; i++){
+                        var k = "#chartPeriod .c3-shape-"+ i;
+                        d3.selectAll(k).style("opacity",0.1);
+                    }
+                }
+                testFilter();
+            };
+            function checkInOutsFunction(){
+                var chk = (document.getElementById('checkInOuts')).checked;
+                if(chk){
+                    allInsOutsSelected=true;
+                    numInsOutsSel =7;
+                    for(var k in isEntrySelected)
+                        isEntrySelected[k] = true;
+                    for(var k in isExitSelected)
+                        isExitSelected[k] = true;
+                    for(var i = 0; i < 7; i++){
+                        var k = "#chartEntriesExits .c3-shape-"+ i;
+                        d3.selectAll(k).style("opacity",1);
+                    }
+                }
+                else{
+                    allInsOutsSelected= false;
+                    numInsOutsSel =0;
+                    for(var k in isEntrySelected)
+                        isEntrySelected[k] = false;
+                    for(var k in isExitSelected)
+                        isExitSelected[k] = false;
+                    for(var i = 0; i < 7; i++){
+                        var k = "#chartEntriesExits .c3-shape-"+ i;
+                        d3.selectAll(k).style("opacity",0.1);
+                    }
+                }
+                testFilter();
+            };
+            
+            DistributionAnimator.prototype.tougleParks = function tougleParks() {
+                if(displayParks){
+                    displayParks = false;
+                    this.removeParkMarkers();
+                }
+                else if(this.isPaused || !this.isAnimating){
+                    displayParks = true;
+                    this.addParkMarkers()
+                }
+            };
+            DistributionAnimator.prototype.addParkMarkers = function addCrimeMarkers() {
+               // var img = "img/tent.png";
+                for(var i = 0; i < campimgParks.length; i++){
+                    var myLatLng =campimgParks[i];
+                    var pos = new google.maps.LatLng(parseFloat(myLatLng.lat),parseFloat(myLatLng.lon));
+                    var marker = new google.maps.Marker({
+                    position: pos,
+                    animation: google.maps.Animation.DROP,
+                    //icon:img,
+                    map: this.map });
+                    this.markers.push(marker);
+                }
+    
+                
+            };
+            DistributionAnimator.prototype.removeParkMarkers = function removeCrimeMarkers() {
+                for(var i=this.markers.length-1 ; i >= 0 ; i--) {
+                  this.markers.pop().setMap(null);
+                }
+              };
+            DistributionAnimator.prototype.setupProgressBar = function setupProgressBar() {
+
+              //setup progress bar slider events
+              this.$progressBar = $('#progress-bar-container');
+              var $progressBarPointer = $('#progress-bar-pointer');
+              var $document = $(document);
+
+              this.progressBarStartPosition = Math.ceil($document.width() * 0.05);
+              this.progressBarEndPosition = $('#heatmapArea').width() - this.progressBarStartPosition;
+              this.$progressBar.css('width', this.progressBarStartPosition + 'px');
+
+              this.totalTimeRange = this.dateRange.end - this.dateRange.start;   
+              this.totalPixelRange = this.progressBarEndPosition - this.progressBarStartPosition;
+
+              var self = this;
+              var stopPointerDrag = function(e) {
+                self.updateCurrentDateToProgressPosition(e.pageX);
+
+                //draw the heatmap frame for our current position
+                self.lowIndex = 0; 
+                self.highIndex = 0;
+                self.drawFrame(self.currentDate);
+                $document.off('mousemove ontouchmove');
+                e.preventDefault();
+              };
+
+              //keep track of the top of the progres bar so that we can stop dragging when the mouse leaves the top 
+              var pointerOffsetTop = $progressBarPointer.offset().top;
+              $(window).resize(function() {
+                pointerOffsetTop = $progressBarPointer.offset().top;
+              });
+
+              //setup dragability of progress bar pointer
+              $progressBarPointer.on('mousedown ontouchstart', function(e) {
+                self.pause.apply(self);
+
+                $document.on('mousemove ontouchmove', function(e) {
+                  if(e.pageY < pointerOffsetTop) {
+                    stopPointerDrag(e);
+                    return;
+                  }
+
+                  //impose start/end limits on progres bar
+                  var x = e.pageX;
+                  if(x > self.progressBarEndPosition)
+                    x = self.progressBarEndPosition;
+                  else if(x < self.progressBarStartPosition)
+                    x = self.progressBarStartPosition;
+
+                  self.$progressBar.css('width', x + 'px');
+
+                  //update progress bar text
+                  self.updateCurrentDateToProgressPosition(x);
+                  self.updateProgressBarText();
+
+                  //in chrome we will animate on drag
+                  if(isBrowserFast)
+                    self.drawFrame(self.currentDate);
+
+                  e.preventDefault();
+                });
+
+                e.preventDefault();
+              });
+
+              //stop dragging 
+              $progressBarPointer.on('mouseup ontouchend', stopPointerDrag);
+
+              this.$progressBarPointer = $progressBarPointer;
+            };
+            
+            var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July',
+                'August', 'September', 'October', 'November', 'December' ];
+            
+            DistributionAnimator.prototype.updateProgressBar = function updateProgressBar() {
+                var x = (this.progressBarStartPosition + (((this.currentDate - this.dateRange.start) / this.totalTimeRange) * this.totalPixelRange));
+                if(x > this.progressBarEndPosition)
+                  x = this.progressBarEndPosition;
+
+                this.$progressBar.css('width' , x + 'px');
+
+                this.updateProgressBarText();
+            };
+            
+            DistributionAnimator.prototype.updateProgressBarText = function updateProgressBarText() {
+                  var now = new Date(this.currentDate);
+                  this.$progressBarPointer.html('<span class=year>- ' + now.getFullYear() + ' -</span><br>' +
+                          monthNames[now.getMonth()] + '<br>' + now.getDate() +'<span class=date-prefix>' + 
+                          getNumberPostfix(now.getDate()) + '</span><br>');
+            };
+            var numberEndings = ['', 'st', 'nd', 'rd', 'th'];
+                function getNumberPostfix(number) {
+                  return numberEndings[number >= numberEndings.length ? numberEndings.length - 1 : number];
+             };
+             
+            function chartPeriodsClick(i) {
+                var period = v_data.vehicle[i+1];
+                var k = "#chartPeriod .c3-shape-"+ i;
+                if(isPeriodSelected[period]){
+                    isPeriodSelected[period]=false;
+                    d3.selectAll(k).style("opacity",0.1);
+                    numPeriodsSel--;
+                    allPeriodsSelected = false;
+                    $('#divCheckPeriods').html("Veículos, todos <label> <input id=\"checkPeriods\" type=\"checkbox\"  value=\"\"></label>");
+                    var $checkPeriods = $('#checkPeriods');
+                    $checkPeriods.click(checkPeriodsFunction.bind(this));
+                }
+                else
+                {
+                    isPeriodSelected[period]=true;
+                    d3.selectAll(k).style("opacity",1);
+                    numPeriodsSel++;
+                    if(numPeriodsSel===6){
+                        allPeriodsSelected = true;
+                        $('#divCheckPeriods').html("Veículos, todos <label><input id=\"checkPeriods\" type=\"checkbox\" checked value=\"\"></label>");
+                        var $checkPeriods = $('#checkPeriods');
+                        $checkPeriods.click(checkPeriodsFunction.bind(this));
+                    }
+                    else{
+                        $('#divCheckPeriods').html("Veículos, todos <label> <input id=\"checkPeriods\" type=\"checkbox\"  value=\"\"></label>");
+                        var $checkPeriods = $('#checkPeriods');
+                        $checkPeriods.click(checkPeriodsFunction.bind(this));
+                    }
+                }
+                testFilter();
+                
+            };
+            
+            
+            function chartEntriesExitsClick(i) {
+                var location = entryExitData.direction[i+1];
+                var k = "#chartEntriesExits .c3-shape-"+i;
+                
+                if(isEntrySelected[location]){
+                    isEntrySelected[location]=false;
+                    d3.selectAll(k).style("opacity",0.1);
+                    numInsOutsSel--;
+                    allInsOutsSelected = false;
+                    $('#divCheckInOuts').html("Direcção, todos <label> <input id=\"checkInOuts\" type=\"checkbox\"  value=\"\"></label>");
+                    
+                }
+                else
+                {
+                    isEntrySelected[location] = true;
+                    d3.selectAll(k).style("opacity",1);
+                    numInsOutsSel++;
+                    if(numInsOutsSel===7){
+                        allInsOutsSelected = true;
+                        $('#divCheckInOuts').html("Direcção, todos <label> <input id=\"checkInOuts\" type=\"checkbox\" checked value=\"\"></label>");
+                        
+                    }
+                }
+                testFilter();
+            };
+            DistributionAnimator.prototype.applyFiltersV2 = function applyFiltersV2(){
+                this.heatmap.setDataSet({max: 1.5, data: []});
+                
+                var initialDate = new Date('2017-01-01');
+                var finalDate = new Date('2017-09-30');
+                var inStartDate = new Date($('#st_date')[0].value);
+                var inEndDate = new Date($('#ed_date')[0].value);
+                if(inStartDate.toString() === "Invalid Date" || inEndDate.toString() === "Invalid Date"){
+                    window.alert("Data inicial ou final não inserida!\nEscolha duas datas entre\n2017-01-01 e 2017-09-30!");
+                }
+                else if(inStartDate < initialDate || inStartDate > finalDate){
+                    window.alert("Data inicial inválida.\nEscolha data uma entre\n2017-01-01 e 2017-09-30!");
+                }
+                else if(inEndDate < inStartDate || inEndDate > finalDate){
+                    window.alert("Data final inválida.\nEscolha data uma entre\n"
+                                    + $('#st_date')[0].value +" e 2017-09-30!");
+                }
+                else{
+                    var chk = (document.getElementById('caravanistsChecked')).checked;
+                    var query = "/sd."+$('#st_date')[0].value+"*ed."+$('#ed_date')[0].value+"*gr.day*ca."+chk;
+                    var subQuery_exc = "";
+                    var subQuery_inc = "";
+                    var allSelected = true;
+                    var numExc = 0;
+                    var numInc = 0;
+                    var elems = document.getElementById("listCountries").getElementsByTagName("span");
+                    for(var i = 0; i < elems.length; i++){
+                        if($(elems[i]).hasClass('labelOpacColors')) {
+                            numExc++;
+                            allSelected = false;
+                            subQuery_exc += "*co.exc="+btoa((elems[i].innerText).trim());
+                        }
+                        else{
+                            numInc++;
+                            subQuery_inc+="*co.inc="+btoa((elems[i].innerText).trim());
+                        }
+
+                    }
+                    if(!allSelected){
+                        if(numExc >= numInc)
+                            query += subQuery_inc;
+                        else
+                            query += subQuery_exc;
+                    }
+                    subQuery_exc="";
+                    subQuery_inc="";
+                    numExc=0;
+                    numInc = 0;
+                    allSelected = true;
+                    var elems = document.getElementById("listTowns").getElementsByTagName("span");
+                    for(var i = 0; i < elems.length; i++){
+                        if($(elems[i]).hasClass('labelOpacColors')) {
+                            allSelected = false;
+                            subQuery_exc += "*tw.exc="+btoa((elems[i].innerText).trim());
+                            numExc++;
+                        }
+                        else{
+                            subQuery_inc += "*tw.inc="+btoa((elems[i].innerText).trim());
+                            numInc++;
+                        }
+
+                    }
+                    if(!allSelected){
+                        if(numExc >= numInc)
+                            query += subQuery_inc;
+                        else
+                            query += subQuery_exc;
+                    }
+
+                    if(!allPeriodsSelected){
+                        var mapP = {"Amanhecer":"a_daybreak", "Manhã":"b_morning","Almoço":"c_lunch time","Tarde":"d_afternoon",
+                                "Jantar":"e_dinner-time","Noite":"f_nighttime"};
+                        for(var k in isPeriodSelected){
+                            if(!isPeriodSelected[k]){
+                                query += "*pe.exc="+btoa(mapP[k]);
+                            }
+                        }
+                    }
+
+                    var mapLocIns = {'Aeroporto':'airportIn', 'V.R.S.António':'VRSAntonioIn','Odeceixe':'n120_OdeceixeIn',
+                        'Monchique':'n266_267monchiqueIn','S.Marcos Serra':'ic1_saoMarcosSerraIn',
+                        'S.BartolomeuMessines':'a2_saoBartolomeuMessinesIn', 'Ameixal':'n2_ameixalIn',
+                      'Balurcos':'ic27_balurcosIn'};
+
+                    var mapLocOuts = {'Aeroporto':'airport', 'V.R.S.António':'VRSAntonio','Odeceixe':'n120_Odeceixe', 
+                        'Monchique':'n266_267monchique','S.Marcos Serra':'ic1_saoMarcosSerra',
+                        'S.BartolomeuMessines':'a2_saoBartolomeuMessines', 'Ameixal':'n2_ameixal','Balurcos':'ic27_balurcos'};
+                    if(!allInsOutsSelected){
+                        for (var k in  isEntrySelected){
+                            if(!isEntrySelected[k])
+                                query += "*in.exc="+btoa(mapLocIns[k])+"*ex.exc="+btoa(mapLocOuts[k]);
+                        }
+                    }
+                    if(oldQuery !== query){
+                        $('#waitDiv').show();
+                        countryData = getTopCountries(query);
+                        roamersInTowns = getRoamersInTowsTop(query,roamersInTowns.numberOfRoamers);
+                        roamersInPeriod = getRoamersInDayPeriod(query,roamersInPeriod.numberOfRoamers);
+                        entryExitData = getRoamersEntriesAndExits(query);
+                        totalRoamers=countryData.total_count;
+                        caravanists = totalCaravanists(query);
+                        $('#total-users').text(totalRoamers);
+                        $('#caravanists-in-parks').text(caravanists);
+                        this.drawCharts(false);
+                        this.updateData(query);
+                        $('#waitDiv').hide();
+                        oldQuery=query;
+                        $('#apply-filter').addClass('labelOpacColors');
+                    }
+                }
+            
+
+            };
+            
+            DistributionAnimator.prototype.updateData = function updateData(query){
+                
+                var flowsData = getAllFlows(query,"day");
+                var stTime = new Date();
+                this.max_flow = flowsData.max_count;
+                this.data = flowsData.flows;
+                this.sortedData = [].slice.call(this.data).sort(function(a, b){return a[2] - b[2]});
+                this.dataLength = this.data.length - 1;
+                this.dateRange = {start: this.data[0][2], end: this.data[this.data.length-1][2]};
+                this.dayRange = Math.ceil((this.dateRange.end - this.dateRange.start) / DAY_IN_MILLI);
+               
+                this.animationTimeMultiplier = 500000 * (this.dayRange / 365);
+
+                //calculate how long crimes should be displayed for based on our range
+                this.visibleLifespan = Math.ceil(this.dayRange / 10);
+                if(this.visibleLifespan < 10)
+                  this.visibleLifespan = 10;
+                else if(this.visibleLifespan > 30)
+                  this.visibleLifespan = 30;
+                this.visibleLifespan = this.visibleLifespan * DAY_IN_MILLI;
+                
+                this.lowIndex = 0; //holds the data index of the oldest crime we are displaying
+                this.highIndex = 0; //holds the data index of the newest crime we are displaying
+                this.currentDate = this.dateRange.start;
+                this.setupProgressBar();
+                this.isAnimating = false;
+                this.pause();
+                $('#progress-bar-pointer').hide();
+                firstHeatmap.setMap(null);
+                firstData = getFirstData(query);
+                firstHeatmap = new google.maps.visualization.HeatmapLayer({
+                    data: firstData.flows,
+                    'radius':12
+                    }); 
+                
+                firstHeatmap.setMap(this.map);
+                
+            };
+            
+            
+            DistributionAnimator.prototype.drawCharts_2 = function drawCharts(first){
+                var stTime = new Date();
+               
+                if(!first){
+                    this.countriesChart_g.destroy();
+                    //this.townsChart_g.destroy();
+                    this.periodChart_g.destroy();
+                    this.entriesExitsChart_g.destroy();
+                }
+                var countriesChart = c3.generate({
+                        bindto: '#chartCountries',
+                        size: {
+                            height: 240
+                        },
+                        data: {
+                            x: 'x',
+                            columns:
+                            [
+                                countryData.countries,
+                                countryData.numberOfRoamers
+                            ],
+                            type: 'bar',
+                            onclick: function (d,i){
+                                    
+                                    //chartCountriesClick(d.x);
+                                },
+                        
+                            color:{
+                                pattern:countryData.colors
+                            },  
+                        }, 
+                        axis: {
+                            rotated: true,
+                            x: {
+                                type: 'category',
+                                tick: {
+                                    fit:true,
+                                    multiline: true
+                                }
+                            },
+                            y:{
+                                tick: {
+                                    values: [countryData.min_count, countryData.max_count],
+                                   // count:2
+                                }
+                            }
+                        }
+                    }
+                );
+                this.countriesChart_g = countriesChart;
+                var townsChart = c3.generate({
+                        bindto: '#chartTowns',
+                        size: {
+                            height: 240
+                        },
+                        data: {
+                            x: 'x',
+                            columns:
+                            [
+                                roamersInTowns.towns,
+                                roamersInTowns.numberOfRoamers
+                            ],
+                            type: 'bar',
+                            onclick: function (d, i) {
+                                //chartTownsClick(d.x);
+                            },
+                            color: {
+                                pattern: roamersInTowns.colors
+                            },
+                        },
+                        axis: {
+                            rotated: true,
+                            x: {
+                                type: 'category'
+                            },
+                            y:{
+                                tick: {
+                                    values: [roamersInTowns.min_count, roamersInTowns.max_count]
+                                    //count:3
+                                }
+                            }
+                        }
+                });
+                this.townsChart_g=townsChart;
+                
+                var periodChart = c3.generate({
+                        bindto: '#chartPeriod',
+                        size: {
+                            height: 240
+                        },
+                        data: {
+                            x: 'x',
+                            columns:
+                            [
+                                v_data.vehicle,
+                                v_data.numberOfPasses
+                            ],
+                            type: 'bar',
+                            onclick: function (d, i) {
+                                chartPeriodsClick(d.x); 
+                            },
+                        color: {
+                            pattern: v_data.colors
+                        }
+                        },
+                        axis: {
+                            rotated: true,
+                            x: {
+                                type: 'category'
+                            },
+                            y:{
+                                tick: {
+                                    values: [v_data.min_count, v_data.max_count]
+                                    //count:3
+                                }
+                            }
+                        }
+                });
+                
+                this.periodChart_g=periodChart;
+                var min_3, max_3;
+                entryExitData.min_in < entryExitData.min_out ? min_3 =entryExitData.min_in:min_3=entryExitData.min_out;
+                entryExitData.max_in > entryExitData.max_out ? max_3 =entryExitData.max_in:max_3=entryExitData.max_out;
+                   
+                var entriesExitsChart = c3.generate({
+                        bindto: '#chartEntriesExits',
+                        size: {
+                            height: 240
+                        },
+                        data: {
+                            x: 'x',
+                            columns:
+                            [
+                                entryExitData.direction,
+                                entryExitData.numberOfPasses
+                            ],
+                            type: 'bar',
+                            onclick: function (d, i) {
+                                chartEntriesExitsClick(d.x); 
+                            },
+                        color: {
+                            pattern: v_data.colors
+                        }
+                        },
+                        axis: {
+                            rotated: true,
+                            x: {
+                                type: 'category'
+                            },
+                            y:{
+                                tick: {
+                                    values: [entryExitData.min_count, entryExitData.max_count]
+                                    //count:3
+                                }
+                            }
+                        }
+                });
+                
+                this.entriesExitsChart_g =entriesExitsChart;
+              
+              
+            };
+            
+            DistributionAnimator.prototype.drawCharts = function drawCharts(first){
+                var stTime = new Date();
+               
+                if(!first){
+                    this.countriesChart_g.destroy();
+                    this.townsChart_g.destroy();
+                    this.periodChart_g.destroy();
+                    this.entriesExitsChart_g.destroy();
+                }
+                var countriesChart = c3.generate({
+                        bindto: '#chartCountries',
+                        size: {
+                            height: 240
+                        },
+                        data: {
+                            x: 'x',
+                            columns:
+                            [
+                                countryData.countries,
+                                countryData.numberOfRoamers
+                            ],
+                            type: 'bar',
+                            onclick: function (d,i){
+                                    
+                                    //chartCountriesClick(d.x);
+                                },
+                        
+                            color:{
+                                pattern:countryData.colors
+                            },  
+                        }, 
+                        axis: {
+                            rotated: true,
+                            x: {
+                                type: 'category',
+                                tick: {
+                                    fit:true,
+                                    multiline: true
+                                }
+                            },
+                            y:{
+                                tick: {
+                                    values: [countryData.min_count, countryData.max_count],
+                                   // count:2
+                                }
+                            }
+                        }
+                    }
+                );
+                this.countriesChart_g = countriesChart;
+                var townsChart = c3.generate({
+                        bindto: '#chartTowns',
+                        size: {
+                            height: 240
+                        },
+                        data: {
+                            x: 'x',
+                            columns:
+                            [
+                                roamersInTowns.towns,
+                                roamersInTowns.numberOfRoamers
+                            ],
+                            type: 'bar',
+                            onclick: function (d, i) {
+                                //chartTownsClick(d.x);
+                            },
+                            color: {
+                                pattern: roamersInTowns.colors
+                            },
+                        },
+                        axis: {
+                            rotated: true,
+                            x: {
+                                type: 'category'
+                            },
+                            y:{
+                                tick: {
+                                    values: [roamersInTowns.min_count, roamersInTowns.max_count]
+                                    //count:3
+                                }
+                            }
+                        }
+                });
+                this.townsChart_g=townsChart;
+                
+                var periodChart = c3.generate({
+                        bindto: '#chartPeriod',
+                        size: {
+                            height: 240
+                        },
+                        data: {
+                            x: 'x',
+                            columns:
+                            [
+                                roamersInPeriod.period,
+                                roamersInPeriod.numberOfRoamers
+                            ],
+                            type: 'bar',
+                            onclick: function (d, i) {
+                                chartPeriodsClick(d.x); 
+                            },
+                        color: {
+                            pattern: roamersInPeriod.colors
+                        }
+                        },
+                        axis: {
+                            rotated: true,
+                            x: {
+                                type: 'category'
+                            },
+                            y:{
+                                tick: {
+                                    values: [roamersInPeriod.min_count, roamersInPeriod.max_count]
+                                    //count:3
+                                }
+                            }
+                        }
+                });
+                
+                this.periodChart_g=periodChart;
+                var min_3, max_3;
+                entryExitData.min_in < entryExitData.min_out ? min_3 =entryExitData.min_in:min_3=entryExitData.min_out;
+                entryExitData.max_in > entryExitData.max_out ? max_3 =entryExitData.max_in:max_3=entryExitData.max_out;
+                   
+                var entriesExitsChart = c3.generate({
+                        bindto: '#chartEntriesExits',
+                        size: {
+                            height: 240
+                        },
+                        data: {
+                        x: 'x',
+                        columns:
+                        [
+                            entryExitData.location,
+                            entryExitData.roamersEntries,
+                            entryExitData.roamersExits
+                        ],
+                        type: 'bar',
+                        onclick: function (d, i) {
+                                chartEntriesExitsClick(d.x, d.id);
+                                 
+                            },    
+                        color: {
+                            pattern:[
+                                entryExitData.colorsEntry,
+                                entryExitData.colorsExit
+                            ]
+                        }
+                        },
+                        axis: {
+                            rotated: true,
+                            x: {
+                                type: 'category'
+                            },
+                            y:{
+                                tick: {
+                                    values: [min_3, max_3]
+                                   // count:3
+                                }
+                            }
+                        },
+                        layout:{
+                            group:['Entradas','Saídas']
+                        }
+                });
+                
+                this.entriesExitsChart_g =entriesExitsChart;
+               // $('*').css('cursor','default');
+              
+              
+            };
+            
+            function testFilter(){
+               var initialDate = new Date('2017-01-01');
+                var finalDate = new Date('2017-09-30');
+                var inStartDate = new Date($('#st_date')[0].value);
+                var inEndDate = new Date($('#ed_date')[0].value);
+                if(inStartDate.toString() === "Invalid Date" || inEndDate.toString() === "Invalid Date"){
+                    window.alert("Data inicial ou final não inserida!\nEscolha duas datas entre\n2017-01-01 e 2017-09-30!");
+                }
+                else if(inStartDate < initialDate || inStartDate > finalDate){
+                    window.alert("Data inicial inválida.\nEscolha data uma entre\n2017-01-01 e 2017-09-30!");
+                }
+                else if(inEndDate < inStartDate || inEndDate > finalDate){
+                    window.alert("Data final inválida.\nEscolha data uma entre\n"
+                                    + $('#st_date')[0].value +" e 2017-09-30!");
+                }
+                else{
+                    var chk = (document.getElementById('caravanistsChecked')).checked;
+                    var query = "/sd."+$('#st_date')[0].value+"*ed."+$('#ed_date')[0].value+"*gr.day*ca."+chk;
+                    var subQuery_exc = "";
+                    var subQuery_inc = "";
+                    var allSelected = true;
+                    var numExc = 0;
+                    var numInc = 0;
+                    var elems = document.getElementById("listCountries").getElementsByTagName("span");
+                    for(var i = 0; i < elems.length; i++){
+                        if($(elems[i]).hasClass('labelOpacColors')) {
+                            numExc++;
+                            allSelected = false;
+                            subQuery_exc += "*co.exc="+btoa((elems[i].innerText).trim());
+                        }
+                        else{
+                            numInc++;
+                            subQuery_inc+="*co.inc="+btoa((elems[i].innerText).trim());
+                        }
+
+                    }
+                    if(!allSelected){
+                        if(numExc >= numInc)
+                            query += subQuery_inc;
+                        else
+                            query += subQuery_exc;
+                    }
+                    subQuery_exc="";
+                    subQuery_inc="";
+                    numExc=0;
+                    numInc = 0;
+                    allSelected = true;
+                    var elems = document.getElementById("listTowns").getElementsByTagName("span");
+                    for(var i = 0; i < elems.length; i++){
+                        if($(elems[i]).hasClass('labelOpacColors')) {
+                            allSelected = false;
+                            subQuery_exc += "*tw.exc="+btoa((elems[i].innerText).trim());
+                            numExc++;
+                        }
+                        else{
+                            subQuery_inc += "*tw.inc="+btoa((elems[i].innerText).trim());
+                            numInc++;
+                        }
+
+                    }
+                    if(!allSelected){
+                        if(numExc >= numInc)
+                            query += subQuery_inc;
+                        else
+                            query += subQuery_exc;
+                    }
+
+                    if(!allPeriodsSelected){
+                        var mapP = {"Amanhecer":"a_daybreak", "Manhã":"b_morning","Almoço":"c_lunch time","Tarde":"d_afternoon",
+                                "Jantar":"e_dinner-time","Noite":"f_nighttime"};
+                        for(var k in isPeriodSelected){
+                            if(!isPeriodSelected[k]){
+                                query += "*pe.exc="+btoa(mapP[k]);
+                            }
+                        }
+                    }
+
+                    var mapLocIns = {'Aeroporto':'airportIn', 'V.R.S.António':'VRSAntonioIn','Odeceixe':'n120_OdeceixeIn',
+                        'Monchique':'n266_267monchiqueIn','S.Marcos Serra':'ic1_saoMarcosSerraIn',
+                        'S.BartolomeuMessines':'a2_saoBartolomeuMessinesIn', 'Ameixal':'n2_ameixalIn',
+                      'Balurcos':'ic27_balurcosIn'};
+
+                    var mapLocOuts = {'Aeroporto':'airport', 'V.R.S.António':'VRSAntonio','Odeceixe':'n120_Odeceixe', 
+                        'Monchique':'n266_267monchique','S.Marcos Serra':'ic1_saoMarcosSerra',
+                        'S.BartolomeuMessines':'a2_saoBartolomeuMessines', 'Ameixal':'n2_ameixal','Balurcos':'ic27_balurcos'};
+                    if(!allInsOutsSelected){
+                        for (var k in  isEntrySelected){
+                            if(!isEntrySelected[k])
+                                query += "*in.exc="+btoa(mapLocIns[k])+"*ex.exc="+btoa(mapLocOuts[k]);
+                        }
+                    }
+                    if(oldQuery!==query){
+                        $('#apply-filter').removeClass('labelOpacColors');
+                    }
+                    else{
+                        $('#apply-filter').addClass('labelOpacColors');
+                    }
+                }
+            };
+          
+            
+            DistributionAnimator.prototype.togglePause = function togglePause() {
+                
+                if(this.isPaused){
+                  firstHeatmap.setMap(null);
+                  this.resume();
+                  $('#progress-bar-pointer').show();
+                }
+                else{
+                    //firstHeatmap.setMap(this.map);
+                  this.pause();
+                  $('#progress-bar-pointer').hide();
+              }
+            };
+            DistributionAnimator.prototype.start = function start() {
+                console.log('starting');
+               firstHeatmap.setMap(null);
+                //set the current date to the first day if we are at the end of the animation
+                if (this.highIndex >= this.dataLength || !this.currentDate)
+                  this.currentDate = this.dateRange.start;
+                //reset our indexes
+                this.lowIndex = 0; 
+                this.highIndex = 0;
+                this.lastDrawTime = new Date().getTime();
+                this.isAnimating = true;
+                //start the animation
+                this.animate();
+            };
+            DistributionAnimator.prototype.pause = function pause() {
+                console.log('pausing');
+                this.buttonStart.removeClass('glyphicon glyphicon-pause');
+                this.buttonStart.addClass('glyphicon glyphicon-play');
+                this.isPaused = true;
+                //firstHeatmap.setMap(this.map);
+            };
+            DistributionAnimator.prototype.resume = function resume() {
+                console.log('resume');
+                firstHeatmap.setMap(null);
+                this.buttonStart.removeClass('glyphicon glyphicon-play');
+                this.buttonStart.addClass('glyphicon glyphicon-pause');
+                this.isPaused = false;
+                //if we are at the end of the animation then restart it
+                if (!this.isAnimating){
+                  this.start();
+                  firstHeatmap.setMap(null);
+              }
+            };
+            
+            DistributionAnimator.prototype.animate = function animate() {
+                console.log('animate');
+                var now = new Date().getTime();
+                if(!this.isPaused) {
+                  var nextDate = this.currentDate + ((now - this.lastDrawTime) * this.animationTimeMultiplier);
+                  this.drawFrame(nextDate);
+                  //increment currentDate to next date
+                  this.currentDate = nextDate;
+                  //update our current progress to match the current date
+                  this.updateProgressBar();// uncoment when set up progress bar
+                }
+                this.lastDrawTime = now;
+                if (this.highIndex < this.dataLength)
+                  window.requestAnimationFrame(this.animate.bind(this));
+                else {
+                  //we are done
+                  this.isAnimating = false;
+                  this.pause();
+                  //console.log("MAxCount: "+ this.maxCount+", MinCount: "+ this.minCount)
+                }
+            };
+            
+            DistributionAnimator.prototype.drawFrame = function drawFrame(nextDate) {
+                firstHeatmap.setMap(null);
+                var visibleThreshold = this.currentDate - this.visibleLifespan;
+                this.updateIndexPositions(visibleThreshold, nextDate);
+                var currentData = this.getCurrentHeatmapData(this.lowIndex, this.highIndex, visibleThreshold);
+                this.heatmap.setDataSet(currentData);
+              
+            };
+            
+             DistributionAnimator.prototype.updateIndexPositions = function updateIndexPositions(visibleThreshold, nextDate) {
+                this.lowIndex = this.getNewIndexPosition(this.lowIndex, visibleThreshold, 0);
+                if(this.highIndex < this.lowIndex)
+                    this.highIndex = this.lowIndex;
+                this.highIndex = this.getNewIndexPosition(this.highIndex, nextDate, this.lowIndex);
+            };
+            
+            DistributionAnimator.prototype.getNewIndexPosition = function getNewIndexPosition(index, comparitorDate, indexMinimum) {
+                //expand the index till it reaches the compairitor date
+                while(index < this.sortedData.length -1) {
+                  if(this.sortedData[index][2] >= comparitorDate)
+                    break;
+                  index += 1;
+                }
+
+                //contract the index till it reaches the compairitor date
+                while(index > indexMinimum) {
+                  if(this.sortedData[index][2] < comparitorDate)
+                    break;
+
+                  index -= 1;
+                }
+
+                return index;   
+            };
+            
+            DistributionAnimator.prototype.updateCurrentDateToProgressPosition = function updateCurrentDateToProgressPosition(progressPosition) {
+                //calc the current position of pointer and translate that into an animation position date
+                var progressBarPercentComplete = (progressPosition - this.progressBarStartPosition) / this.totalPixelRange;
+                //var progressBarPercentComplete = (progressPosition - Math.ceil($('#heatmapArea').width() * 0.05)) / this.totalPixelRange;
+                this.currentDate = this.dateRange.start + ((this.dateRange.end - this.dateRange.start) * progressBarPercentComplete);
+            };
+            
+            DistributionAnimator.prototype.getCurrentHeatmapData = function getCurrentHeatmapData(lowIndex, highIndex, visibleThreshold) {
+           
+                var currentData = this.sortedData.slice(this.lowIndex, this.highIndex + 1);
+                var flow, count, timeFromHighIndex, heatmapData = [];
+                var currentTimeRange = this.currentDate - visibleThreshold;
+                for(var i = currentData.length-1 ; i >= 0 ; i--) {
+                    flow = currentData[i];
+                    timeFromHighIndex = this.currentDate - flow[2];
+                    var x = timeFromHighIndex / currentTimeRange;
+                    count = Math.abs((flow[3] * 1.5 /this.max_flow ) * (x - Math.pow(x, 2)));
+                    //count = flow[3]/ this.max_flow;
+                    heatmapData.push({lat : flow[0], lng : flow[1], count: count});
+                 
+                }
+                //console.log("heatMap length: "+heatmapData.length);    
+                return {max: 2.05, data: heatmapData}; // max = 75
+            };
+            
+            
+            
+            
+            
+            !function($){
+                $(function(){
+                    
+                  
+                  var myLatlng = new google.maps.LatLng(40.575335,-8.445468);
+
+                  var myOptions = {
+                    zoom: 13,
+                    center: myLatlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    disableDefaultUI: true,
+                    scrollwheel: true,
+                    draggable: true,
+                    navigationControl: true,
+                    mapTypeControl: true,
+                    scaleControl: true,
+                    disableDoubleClickZoom: true,
+                    styles: [{ "stylers": [
+                      { "saturation": -26 },  
+                      { "lightness": 18 },
+                      { "visibility": "on" }
+                    ]}]
+                  };
+                  
+                  console.log("Start");
+                 
+                  fData =  getAllDataAg();
+                  var map = new google.maps.Map($('#heatmapArea')[0], myOptions);  
+                  
+                  firstHeatmap = new google.maps.visualization.HeatmapLayer({
+                    data: fData,
+                    'radius':12
+                    }); 
+                  
+                  firstHeatmap.setMap(map);
+                  console.log(fData);
+                  var heatmap = new HeatmapOverlay(map, {
+                      'radius':10,
+                      'visible':true, 
+                      'opacity':40
+                  });
+                console.log("Query flows done!")
+                
+                flowsData =  getFirstData("");
+                 console.log("Query flows done!");
+                 totals_vehicles=  getTotals();
+                 total_cars =  getTotalCars();
+                 total_vans =  getTotalVans();
+                 total_two_wheelers =  getTotalTwoWheelers();
+                 total_trucks =  getTotalTrucks();
+                 total_semi_trucks =  getTotalSemiTrucks();
+                /*entryExitData = getRoamersEntriesAndExits("");
+                console.log("Query entryExits done!");
+                countryData =  getTopCountries("",[]);
+                 console.log("Query countries done!");
+                townsData =  getRoamersInTowsTop("",[]);
+                 console.log("Query towns done!");
+                periodData = getRoamersInDayPeriod("",[]); */
+                vehicles_data = getVehiclesCount("");
+                  entryExitData = getDirectionsCount("");
+                  countryData =  getStreetsCount("");
+                  townsData =  getSpeedsCount("");
+                   
+                  var animator = new DistributionAnimator(flowsData, heatmap, map, totalCaravanistsInPark = 0,
+                                        totalCaravanistsOutParks = 0, countryData ,townsData,periodData={},
+                                        entryExitData,totals_vehicles,total_cars,total_vans,total_two_wheelers,
+                                        total_trucks,total_semi_trucks,vehicles_data);
+
+                  window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || 
+                                          window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || 
+                                          function(fn) {return setTimeout(fn, 1000 / 60);};
+                    
+              });
+            }(window.jQuery);
+            $('#waitDiv').show();
+            
+            var caravanists = 0;//totalCaravanists("");
+            var firstData = {};
+            var flowsData = {};
+            var entryExitData = {};
+            var countryData = {};
+            var townsData = {};
+            var periodData = {};
+            var totalRoamers = [];//getTotalRoamers();
+            var totalCaravanistsInParks = [];//getTotalCaravanistsInPark();
+            var totalCaravanistsOutParks = [];//getTotalCaravanistsOutPark();
+            var firstHeatmap;
+            var campimgParks = getConters();
+            
+            
+            
+           // console.log("-->"+Data[0].get_all_roamers);
+        </script>
+        
+    </body>
+</html>
